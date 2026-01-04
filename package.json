@@ -1,0 +1,39 @@
+{
+  "name": "@cadit-app/qr-code",
+  "version": "0.1.0",
+  "description": "QR Code Generator for CADit - Generate customizable 3D QR codes",
+  "type": "module",
+  "main": "src/main.ts",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "generate": "npx tsx cli.ts",
+    "build:glb": "npx tsx cli.ts output.glb",
+    "build:3mf": "npx tsx cli.ts output.3mf"
+  },
+  "dependencies": {
+    "@cadit-app/script-params": "^0.1.0",
+    "@cadit-app/svg-sampler": "^0.1.0",
+    "qrcode": "^1.5.4"
+  },
+  "peerDependencies": {
+    "@cadit-app/manifold-3d": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/qrcode": "^1.5.5",
+    "@cadit-app/manifold-3d": "^3.3.2",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "keywords": [
+    "cadit",
+    "qr-code",
+    "3d-printing",
+    "parametric"
+  ],
+  "author": {
+    "name": "CADit"
+  },
+  "license": "MIT"
+}

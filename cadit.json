@@ -1,0 +1,19 @@
+{
+  "name": "QR Code Generator",
+  "description": "Generate customizable 3D QR codes with various dot shapes, eye styles, and error correction levels. Perfect for 3D printing personalized QR codes.",
+  "entryPoint": "src/main.ts",
+  "tags": ["qr-code", "generator", "3d-printing", "customizable"],
+  "category": "Tools",
+  "license": {
+    "type": "MIT"
+  },
+  "author": {
+    "name": "CADit"
+  },
+  "images": [
+    {
+      "path": "images/preview.png",
+      "alt": "QR Code Generator Preview"
+    }
+  ]
+}
