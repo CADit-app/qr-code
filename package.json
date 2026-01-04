@@ -9,7 +9,8 @@
     "build": "tsc",
     "generate": "npx tsx cli.ts",
     "build:glb": "npx tsx cli.ts output.glb",
-    "build:3mf": "npx tsx cli.ts output.3mf"
+    "build:3mf": "npx tsx cli.ts output.3mf",
+    "generate:svgs": "node scripts/generate-embedded-svgs.cjs"
   },
   "dependencies": {
     "@cadit-app/script-params": "^0.1.0",

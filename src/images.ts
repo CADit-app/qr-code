@@ -1,99 +1,85 @@
 /**
  * SVG image content for QR code shapes
  * 
- * In a CADit script, SVGs are loaded at runtime from relative paths.
- * This module provides functions to fetch and cache SVG content.
+ * SVGs are embedded directly as strings to avoid runtime fetch issues
+ * in the CADit browser environment.
  */
 
-// Cache for loaded SVG content
-const svgCache: Record<string, string> = {};
+import { getSvgContent, embeddedSvgs } from './embeddedSvgs';
 
 /**
- * Mapping of shape names to their SVG file paths (relative to script)
+ * Mapping of shape names to their SVG file names (without extension)
  */
 export const svgPaths: Record<string, { shape: string; pattern?: string }> = {
   // Basic shapes
-  heart: { shape: './images/heart.svg', pattern: './images/heartPattern.svg' },
-  circle: { shape: './images/circle.svg', pattern: './images/circlePattern.svg' },
-  circlePadding: { shape: './images/circle.svg', pattern: './images/circlePaddingPattern.svg' },
-  square: { shape: './images/square.svg', pattern: './images/squarePattern.svg' },
-  squarePadding: { shape: './images/square.svg', pattern: './images/squarePaddingPattern.svg' },
-  squareRounded: { shape: './images/squareRounded.svg', pattern: './images/squareRoundedPattern.svg' },
-  squareRoundedPadding: { shape: './images/squareRounded.svg', pattern: './images/squareRoundedPaddingPattern.svg' },
-  star: { shape: './images/star.svg', pattern: './images/starPattern.svg' },
-  octagon: { shape: './images/octagon.svg', pattern: './images/octagonPattern.svg' },
-  plus: { shape: './images/plus.svg', pattern: './images/plusPattern.svg' },
-  diamond: { shape: './images/diamond.svg', pattern: './images/diamondPattern.svg' },
-  squareHollow: { shape: './images/squareHollow.svg', pattern: './images/squareHollowPattern.svg' },
-  squareHollow2: { shape: './images/squareHollow2.svg', pattern: './images/squareHollow2Pattern.svg' },
-  xShape: { shape: './images/xShape.svg', pattern: './images/xShapePattern.svg' },
+  heart: { shape: 'heart', pattern: 'heartPattern' },
+  circle: { shape: 'circle', pattern: 'circlePattern' },
+  circlePadding: { shape: 'circle', pattern: 'circlePaddingPattern' },
+  square: { shape: 'square', pattern: 'squarePattern' },
+  squarePadding: { shape: 'square', pattern: 'squarePaddingPattern' },
+  squareRounded: { shape: 'squareRounded', pattern: 'squareRoundedPattern' },
+  squareRoundedPadding: { shape: 'squareRounded', pattern: 'squareRoundedPaddingPattern' },
+  star: { shape: 'star', pattern: 'starPattern' },
+  octagon: { shape: 'octagon', pattern: 'octagonPattern' },
+  plus: { shape: 'plus', pattern: 'plusPattern' },
+  diamond: { shape: 'diamond', pattern: 'diamondPattern' },
+  squareHollow: { shape: 'squareHollow', pattern: 'squareHollowPattern' },
+  squareHollow2: { shape: 'squareHollow2', pattern: 'squareHollow2Pattern' },
+  xShape: { shape: 'xShape', pattern: 'xShapePattern' },
   
   // Line patterns
-  line: { shape: './images/line.svg' },
-  thinLine: { shape: './images/thinLine.svg' },
-  wideLine: { shape: './images/wideLine.svg' },
-  lines: { shape: './images/square.svg', pattern: './images/linePattern.svg' },
-  linesFilled: { shape: './images/square.svg', pattern: './images/linePatternFilled.svg' },
+  line: { shape: 'line' },
+  thinLine: { shape: 'thinLine' },
+  wideLine: { shape: 'wideLine' },
+  lines: { shape: 'square', pattern: 'linePattern' },
+  linesFilled: { shape: 'square', pattern: 'linePatternFilled' },
   
   // Intermediate patterns
-  xShapeInter: { shape: './images/xShape.svg', pattern: './images/xShapeInterPattern.svg' },
-  dotsInterVert: { shape: './images/circle.svg', pattern: './images/dotsInterVertPattern.svg' },
-  dotsInterHor: { shape: './images/circle.svg', pattern: './images/dotsInterHorPattern.svg' },
-  dotsInterFill: { shape: './images/circle.svg', pattern: './images/dotsInterFillPattern.svg' },
-  dotsInterThinHor: { shape: './images/circle.svg', pattern: './images/dotsInterThinHorPattern.svg' },
-  dotsInterThinVert: { shape: './images/circle.svg', pattern: './images/dotsInterThinVertPattern.svg' },
-  dotsInterThinHorVert: { shape: './images/circle.svg', pattern: './images/dotsInterThinHorVertPattern.svg' },
-  dotsInterThinEnds: { shape: './images/circle.svg', pattern: './images/dotsInterThinEndsPattern.svg' },
+  xShapeInter: { shape: 'xShape', pattern: 'xShapeInterPattern' },
+  dotsInterVert: { shape: 'circle', pattern: 'dotsInterVertPattern' },
+  dotsInterHor: { shape: 'circle', pattern: 'dotsInterHorPattern' },
+  dotsInterFill: { shape: 'circle', pattern: 'dotsInterFillPattern' },
+  dotsInterThinHor: { shape: 'circle', pattern: 'dotsInterThinHorPattern' },
+  dotsInterThinVert: { shape: 'circle', pattern: 'dotsInterThinVertPattern' },
+  dotsInterThinHorVert: { shape: 'circle', pattern: 'dotsInterThinHorVertPattern' },
+  dotsInterThinEnds: { shape: 'circle', pattern: 'dotsInterThinEndsPattern' },
   
   // Outer eye shapes
-  outerEyeSquare: { shape: './images/outerEyeSquare.svg' },
-  outerEyeSquareRounded: { shape: './images/outerEyeSquareRounded.svg' },
-  outerEyeCircle: { shape: './images/outerEyeCircle.svg' },
-  outerEyeInnerSquareRounded: { shape: './images/outerEyeInnerSquareRounded.svg' },
-  outerEyeSquareSingleSharpCorner: { shape: './images/outerEyeSquareSingleSharpCorner.svg' },
-  outerEyeOctagon: { shape: './images/outerEyeOctagon.svg' },
-  outerEyeSquareGrid: { shape: './images/outerEyeSquareGrid.svg' },
-  outerEyeCircleGrid: { shape: './images/outerEyeCircleGrid.svg' },
+  outerEyeSquare: { shape: 'outerEyeSquare' },
+  outerEyeSquareRounded: { shape: 'outerEyeSquareRounded' },
+  outerEyeCircle: { shape: 'outerEyeCircle' },
+  outerEyeInnerSquareRounded: { shape: 'outerEyeInnerSquareRounded' },
+  outerEyeSquareSingleSharpCorner: { shape: 'outerEyeSquareSingleSharpCorner' },
+  outerEyeOctagon: { shape: 'outerEyeOctagon' },
+  outerEyeSquareGrid: { shape: 'outerEyeSquareGrid' },
+  outerEyeCircleGrid: { shape: 'outerEyeCircleGrid' },
 };
 
 /**
- * SVG raw content - loaded at runtime
- * This will be populated when loadSvgContent is called
+ * SVG raw content - populated from embedded SVGs
+ * This provides backward compatibility with code that expects svgRawContent
  */
-export const svgRawContent: Record<string, string> = {};
+export const svgRawContent: Record<string, string> = embeddedSvgs;
 
 /**
- * Load SVG content for a shape from its file
- * Uses the CADit script loader's fetch capability
+ * Load SVG content for a shape
+ * Now synchronous since SVGs are embedded - returns a resolved promise for backward compatibility
  */
 export async function loadSvgContent(shapeName: string): Promise<string> {
-  if (svgCache[shapeName]) {
-    return svgCache[shapeName];
-  }
-  
+  // For shape names that map to different SVG files, use the mapping
   const pathInfo = svgPaths[shapeName];
-  if (!pathInfo) {
-    throw new Error(`Unknown shape: ${shapeName}`);
+  if (pathInfo) {
+    return getSvgContent(pathInfo.shape);
   }
   
-  // Fetch the SVG file - CADit runtime provides fetch for relative paths
-  const response = await fetch(pathInfo.shape);
-  if (!response.ok) {
-    throw new Error(`Failed to load SVG: ${pathInfo.shape}`);
-  }
-  
-  const content = await response.text();
-  svgCache[shapeName] = content;
-  svgRawContent[shapeName] = content;
-  
-  return content;
+  // Otherwise try to get the SVG directly by name
+  return getSvgContent(shapeName);
 }
 
 /**
  * Preload all SVG content
- * This should be called during initialization
+ * No-op now since SVGs are embedded, kept for backward compatibility
  */
 export async function preloadAllSvgs(): Promise<void> {
-  const shapes = Object.keys(svgPaths);
-  await Promise.all(shapes.map(loadSvgContent));
+  // No-op - SVGs are embedded at build time
 }
