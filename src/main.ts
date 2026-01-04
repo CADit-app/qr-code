@@ -142,7 +142,12 @@ export default defineParams({
     type: 'choice',
     label: 'Error Correction Level',
     default: 'M',
-    options: ['L', 'M', 'Q', 'H'],
+    options: [
+      { value: 'L', label: 'Low (7%)' },
+      { value: 'M', label: 'Medium (15%)' },
+      { value: 'Q', label: 'Quartile (25%)' },
+      { value: 'H', label: 'High (30%)' },
+    ],
   },
 }, async (params): Promise<Manifold> => {
   // Generate the 2D cross-section

@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@cadit-app/script-params':
-        specifier: ^0.1.0
-        version: 0.1.0
+        specifier: ^0.1.1
+        version: 0.1.1
       '@cadit-app/svg-sampler':
         specifier: ^0.1.0
         version: 0.1.0
@@ -40,8 +40,8 @@ packages:
     resolution: {integrity: sha512-GVrcmRbp11EbT/LM02SCNzyPJM+S3ts6e8ss/Du6qbl2oGLxwM9sulm9NQUk2VkQqeMCieRmejMOm9hgjEMJ7w==}
     hasBin: true
 
-  '@cadit-app/script-params@0.1.0':
-    resolution: {integrity: sha512-4YjpX5aSIWB1PKrEgke5HDTgTi39FGeTCvPb7GhBZKB/A+5aOKc58/OoCVCmN//xDGvSbqHYDrX1LjKRC+gYLg==}
+  '@cadit-app/script-params@0.1.1':
+    resolution: {integrity: sha512-yE/NZ2Dl6sHKBnZ4RJ8AxER6lz4+y7HC6bx3bwogPoFkTSyVCk7W12Dr2PY6dGLD3aS+nk7oq7MfFdXePsDpJw==}
 
   '@cadit-app/svg-sampler@0.1.0':
     resolution: {integrity: sha512-j8pdVShsW3Dph80OK/D+UypOyQZ4Z1xoqD12w1F9sJWyQDbLdvO7aMVrLWHzy7TUZSp7UwgnPUSfnpiXMjXPYA==}
@@ -625,7 +625,7 @@ snapshots:
       magic-string: 0.30.21
       url-or-path: 2.6.1
 
-  '@cadit-app/script-params@0.1.0': {}
+  '@cadit-app/script-params@0.1.1': {}
 
   '@cadit-app/svg-sampler@0.1.0':
     dependencies:

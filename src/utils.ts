@@ -4,7 +4,7 @@
 
 import { CrossSection } from '@cadit-app/manifold-3d/manifoldCAD';
 import { svgToPolygons } from '@cadit-app/svg-sampler';
-import { svgRawContent, loadSvgContent } from './images';
+import { loadSvgContent } from './images';
 
 /**
  * Parse an SVG shape into a Manifold CrossSection
@@ -13,13 +13,10 @@ export const parseSvgToCrossSection = async (
   shapeName: string,
   maxError: number = 0.1
 ): Promise<CrossSection> => {
-  // Load SVG content if not already cached
-  await loadSvgContent(shapeName);
-  
-  // Get the SVG content
-  const svgContent = svgRawContent[shapeName];
+  // Load SVG content using the mapping (handles value-to-filename translation)
+  const svgContent = await loadSvgContent(shapeName);
   if (!svgContent) {
-    throw new Error(`Unknown shape: ${shapeName}. Available shapes: ${Object.keys(svgRawContent).join(', ')}`);
+    throw new Error(`Unknown shape: ${shapeName}`);
   }
 
   // Sample the SVG into polygons
