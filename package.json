@@ -1,6 +1,6 @@
 {
   "name": "@cadit-app/qr-code",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "QR Code Generator for CADit - Generate customizable 3D QR codes",
   "type": "module",
   "main": "src/main.ts",
