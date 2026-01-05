@@ -15,11 +15,8 @@ import { svgExport } from './svgExport';
 import * as resvg from '@resvg/resvg-wasm';
 import type { QrCodeParams } from './params';
 
-// Import version from package.json to construct the WASM URL dynamically.
-// This ensures the WASM version matches the installed @resvg/resvg-wasm package.
-import packageJson from '../package.json' with { type: 'json' };
-
-const RESVG_VERSION = packageJson.dependencies['@resvg/resvg-wasm'].replace('^', '');
+// Hardcoded version for WASM URL - update when upgrading @resvg/resvg-wasm dependency
+const RESVG_VERSION = '2.6.2';
 
 let wasmInitialized = false;
 let wasmInitPromise: Promise<void> | null = null;
