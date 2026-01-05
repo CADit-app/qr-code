@@ -1,6 +1,6 @@
 {
   "name": "@cadit-app/qr-code",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "QR Code Generator for CADit - Generate customizable 3D QR codes",
   "type": "module",
   "main": "src/main.ts",
@@ -13,7 +13,7 @@
     "generate:svgs": "node scripts/generate-embedded-svgs.cjs"
   },
   "dependencies": {
-    "@cadit-app/script-params": "0.3.0",
+    "@cadit-app/script-params": "0.4.1",
     "@cadit-app/svg-sampler": "^0.1.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "qrcode": "^1.5.4"

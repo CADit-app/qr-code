@@ -5,7 +5,7 @@
  */
 
 import type { Exporter, ExportResult } from '@cadit-app/script-params';
-import { makeCrossSection } from './main';
+import { makeCrossSection } from './makeCrossSection';
 import type { QrCodeParams } from './params';
 
 /**
