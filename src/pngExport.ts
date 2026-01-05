@@ -10,16 +10,7 @@
 import type { Exporter, ExportResult } from '@cadit-app/script-params';
 import { svgExport } from './svgExport';
 import * as resvg from '@resvg/resvg-wasm';
-
-type QrCodeParams = {
-  text: string;
-  size: number;
-  extrudeDepth: number;
-  dotShape: string;
-  innerEyeShape: string;
-  outerEyeShape: string;
-  errorCorrectionLevel: string;
-};
+import type { QrCodeParams } from './params';
 
 let wasmInitialized = false;
 let wasmInitPromise: Promise<void> | null = null;
@@ -80,9 +71,9 @@ export const pngExport = async (params: QrCodeParams): Promise<ExportResult> => 
 /**
  * PNG Exporter definition for use with defineParams.
  */
-export const pngExporter: Exporter = {
+export const pngExporter: Exporter<QrCodeParams> = {
   name: "PNG",
   label: "Download PNG",
   description: "Export the QR code as a PNG image file.",
-  export: pngExport as unknown as Exporter['export'],
+  export: pngExport,
 };

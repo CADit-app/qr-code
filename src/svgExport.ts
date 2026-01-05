@@ -6,16 +6,7 @@
 
 import type { Exporter, ExportResult } from '@cadit-app/script-params';
 import { makeCrossSection } from './main';
-
-type QrCodeParams = {
-  text: string;
-  size: number;
-  extrudeDepth: number;
-  dotShape: string;
-  innerEyeShape: string;
-  outerEyeShape: string;
-  errorCorrectionLevel: string;
-};
+import type { QrCodeParams } from './params';
 
 /**
  * Generate SVG content from QR code parameters.
@@ -81,9 +72,9 @@ export const svgExport = async (params: QrCodeParams, scale = 1): Promise<Export
 /**
  * SVG Exporter definition for use with defineParams.
  */
-export const svgExporter: Exporter = {
+export const svgExporter: Exporter<QrCodeParams> = {
   name: "SVG",
   label: "Download SVG",
   description: "Export the QR code as a scalable vector graphic (SVG) file.",
-  export: svgExport as unknown as Exporter['export'],
+  export: svgExport,
 };
