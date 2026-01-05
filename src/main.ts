@@ -2,7 +2,7 @@
  * @cadit-app/qr-code
  * 
  * A customizable QR Code generator for CADit.
- * Uses the new defineParams API from @cadit-app/script-params.
+ * Uses the defineParams API from @cadit-app/script-params.
  */
 
 import { defineParams } from '@cadit-app/script-params';
@@ -11,6 +11,8 @@ import { parseSvgToCrossSection } from './utils';
 import { generateQrCrossSection, CodeShapeOptions } from './generateQrCs';
 import { getCodeShapeOptions, initializeDotShapeOptions } from './getCodeShapeOptions';
 import { scaleToSizeAndCenter } from './crossSectionUtils';
+import { svgExporter } from './svgExport';
+import { pngExporter } from './pngExport';
 
 // SVG image paths (relative to this script)
 const dotShapeOptions = [
@@ -100,66 +102,73 @@ export const makeCrossSection = async (params: {
  * Main entry point using defineParams
  */
 export default defineParams({
-  text: {
-    type: 'text',
-    label: 'Text to encode',
-    default: 'cookiecad.com',
+  params: {
+    text: {
+      type: 'text',
+      label: 'Text to encode',
+      default: 'cookiecad.com',
+    },
+    size: {
+      type: 'number',
+      label: 'Size (mm)',
+      default: 25,
+      min: 5,
+      max: 200,
+    },
+    extrudeDepth: {
+      type: 'number',
+      label: 'Extrude Depth (mm)',
+      default: 0.5,
+      min: 0.1,
+      max: 10,
+      step: 0.1,
+    },
+    dotShape: {
+      type: 'buttonGrid',
+      label: 'Dot Shape',
+      default: 'square',
+      options: dotShapeOptions,
+    },
+    innerEyeShape: {
+      type: 'buttonGrid',
+      label: 'Inner Eye Shape',
+      default: 'square',
+      options: innerEyeShapeOptions,
+    },
+    outerEyeShape: {
+      type: 'buttonGrid',
+      label: 'Outer Eye Shape',
+      default: 'outerEyeSquare',
+      options: outerEyeShapeOptions,
+    },
+    errorCorrectionLevel: {
+      type: 'choice',
+      label: 'Error Correction Level',
+      default: 'M',
+      options: [
+        { value: 'L', label: 'Low (7%)' },
+        { value: 'M', label: 'Medium (15%)' },
+        { value: 'Q', label: 'Quartile (25%)' },
+        { value: 'H', label: 'High (30%)' },
+      ],
+    },
   },
-  size: {
-    type: 'number',
-    label: 'Size (mm)',
-    default: 25,
-    min: 5,
-    max: 200,
+  exporters: {
+    svg: svgExporter,
+    png: pngExporter,
   },
-  extrudeDepth: {
-    type: 'number',
-    label: 'Extrude Depth (mm)',
-    default: 0.5,
-    min: 0.1,
-    max: 10,
-    step: 0.1,
-  },
-  dotShape: {
-    type: 'buttonGrid',
-    label: 'Dot Shape',
-    default: 'square',
-    options: dotShapeOptions,
-  },
-  innerEyeShape: {
-    type: 'buttonGrid',
-    label: 'Inner Eye Shape',
-    default: 'square',
-    options: innerEyeShapeOptions,
-  },
-  outerEyeShape: {
-    type: 'buttonGrid',
-    label: 'Outer Eye Shape',
-    default: 'outerEyeSquare',
-    options: outerEyeShapeOptions,
-  },
-  errorCorrectionLevel: {
-    type: 'choice',
-    label: 'Error Correction Level',
-    default: 'M',
-    options: [
-      { value: 'L', label: 'Low (7%)' },
-      { value: 'M', label: 'Medium (15%)' },
-      { value: 'Q', label: 'Quartile (25%)' },
-      { value: 'H', label: 'High (30%)' },
-    ],
-  },
-}, async (params): Promise<Manifold> => {
-  // Generate the 2D cross-section
-  const qrCode = await makeCrossSection({
-    text: params.text,
-    dotShape: params.dotShape,
-    innerEyeShape: params.innerEyeShape,
-    outerEyeShape: params.outerEyeShape,
-    errorCorrectionLevel: params.errorCorrectionLevel,
-  });
+  main: async (params): Promise<Manifold> => {
+    // Generate the 2D cross-section
+    const qrCode = await makeCrossSection({
+      text: params.text,
+      dotShape: params.dotShape,
+      innerEyeShape: params.innerEyeShape,
+      outerEyeShape: params.outerEyeShape,
+      errorCorrectionLevel: params.errorCorrectionLevel,
+    });
 
-  // Scale and extrude the QR code
-  const sized = scaleToSizeAndCenter(qrCode, params.size, params.size);
-  return sized.extrude(params.extrudeDepth);
+    // Scale and extrude the QR code
+    const sized = scaleToSizeAndCenter(qrCode, params.size, params.size);
+    return sized.extrude(params.extrudeDepth);
+  },
 });

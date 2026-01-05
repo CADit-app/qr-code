@@ -9,11 +9,14 @@ importers:
   .:
     dependencies:
       '@cadit-app/script-params':
-        specifier: ^0.1.1
-        version: 0.1.1
+        specifier: ^0.2.0
+        version: 0.2.0
       '@cadit-app/svg-sampler':
         specifier: ^0.1.0
         version: 0.1.0
+      '@resvg/resvg-wasm':
+        specifier: ^2.6.2
+        version: 2.6.2
       qrcode:
         specifier: ^1.5.4
         version: 1.5.4
@@ -40,8 +43,8 @@ packages:
     resolution: {integrity: sha512-GVrcmRbp11EbT/LM02SCNzyPJM+S3ts6e8ss/Du6qbl2oGLxwM9sulm9NQUk2VkQqeMCieRmejMOm9hgjEMJ7w==}
     hasBin: true
 
-  '@cadit-app/script-params@0.1.1':
-    resolution: {integrity: sha512-yE/NZ2Dl6sHKBnZ4RJ8AxER6lz4+y7HC6bx3bwogPoFkTSyVCk7W12Dr2PY6dGLD3aS+nk7oq7MfFdXePsDpJw==}
+  '@cadit-app/script-params@0.2.0':
+    resolution: {integrity: sha512-M3w/3kp71j1vICj47e1PfOJCLuQ6XX0PLIJwvVMHZ96ZMLJhfW4BQqKE5AJh0qbpmEBwkZxWRy56WsQpbGJR4g==}
 
   '@cadit-app/svg-sampler@0.1.0':
     resolution: {integrity: sha512-j8pdVShsW3Dph80OK/D+UypOyQZ4Z1xoqD12w1F9sJWyQDbLdvO7aMVrLWHzy7TUZSp7UwgnPUSfnpiXMjXPYA==}
@@ -364,6 +367,10 @@ packages:
   '@jscadui/3mf-export@0.5.0':
     resolution: {integrity: sha512-y5vZktqCjyi7wA38zqNlLIdZUIRZoOO9vCjLzwmL4bR0hk7B/Zm1IeffzJPFe1vFc0C1IEv3hm8caDv3doRk9g==}
 
+  '@resvg/resvg-wasm@2.6.2':
+    resolution: {integrity: sha512-FqALmHI8D4o6lk/LRWDnhw95z5eO+eAa6ORjVg09YRR7BkcM6oPHU9uyC0gtQG5vpFLvgpeU4+zEAz2H8APHNw==}
+    engines: {node: '>= 10'}
+
   '@types/ndarray@1.0.14':
     resolution: {integrity: sha512-oANmFZMnFQvb219SSBIhI1Ih/r4CvHDOzkWyJS/XRqkMrGH5/kaPSA1hQhdIBzouaE+5KpE/f5ylI9cujmckQg==}
 
@@ -625,7 +632,7 @@ snapshots:
       magic-string: 0.30.21
       url-or-path: 2.6.1
 
-  '@cadit-app/script-params@0.1.1': {}
+  '@cadit-app/script-params@0.2.0': {}
 
   '@cadit-app/svg-sampler@0.1.0':
     dependencies:
@@ -839,6 +846,8 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@jscadui/3mf-export@0.5.0': {}
+
+  '@resvg/resvg-wasm@2.6.2': {}
 
   '@types/ndarray@1.0.14': {}
 
