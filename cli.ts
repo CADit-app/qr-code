@@ -1,16 +1,21 @@
 #!/usr/bin/env npx tsx
 /**
- * CLI for generating 3D QR code models
+ * CLI for generating QR code outputs
  * 
  * Usage:
  *   npx tsx cli.ts output.glb
  *   npx tsx cli.ts output.3mf
+ *   npx tsx cli.ts output.svg
+ *   npx tsx cli.ts output.png
  *   npx tsx cli.ts output.glb --text "https://example.com"
  */
 import { fileURLToPath } from 'url';
 import { dirname, join, extname } from 'path';
 import { readFile, writeFile } from 'fs/promises';
 import { parseArgs } from 'util';
+
+const SUPPORTED_FORMATS = ['.glb', '.3mf', '.svg', '.png'] as const;
+type OutputFormat = typeof SUPPORTED_FORMATS[number];
 
 // Polyfill fetch for local file loading in Node.js
 const __filename = fileURLToPath(import.meta.url);
@@ -58,12 +63,18 @@ if (values.help || positionals.length === 0) {
 QR Code Generator CLI
 
 Usage:
-  npx tsx cli.ts <output.[glb|3mf]> [options]
+  npx tsx cli.ts <output.[glb|3mf|svg|png]> [options]
+
+Output Formats:
+  .glb   3D model (GLTF binary)
+  .3mf   3D model for printing
+  .svg   2D vector graphic
+  .png   2D raster image
 
 Options:
   -t, --text <string>       Text to encode (default: "cookiecad.com")
   -s, --size <number>       Size in mm (default: 25)
-  -d, --depth <number>      Extrusion depth in mm (default: 0.5)
+  -d, --depth <number>      Extrusion depth in mm (default: 0.5, 3D only)
   --dot-shape <string>      Dot shape (default: "square")
   --inner-eye <string>      Inner eye shape (default: "square")
   --outer-eye <string>      Outer eye shape (default: "outerEyeSquare")
@@ -72,21 +83,23 @@ Options:
 
 Examples:
   npx tsx cli.ts qr-code.glb
-  npx tsx cli.ts qr-code.3mf --text "https://example.com" --size 30
-  npx tsx cli.ts output.glb -t "Hello World" -s 50 -d 1
+  npx tsx cli.ts qr-code.svg --text "https://example.com"
+  npx tsx cli.ts qr-code.png --dot-shape circle
+  npx tsx cli.ts qr-code.3mf --text "Hello World" --size 50 --depth 1
 `);
   process.exit(0);
 }
 
 const outputFile = positionals[0];
-const ext = extname(outputFile).toLowerCase();
+const ext = extname(outputFile).toLowerCase() as OutputFormat;
 
-if (ext !== '.glb' && ext !== '.3mf') {
-  console.error(`Error: Output file must have .glb or .3mf extension, got: ${ext}`);
+if (!SUPPORTED_FORMATS.includes(ext)) {
+  console.error(`Error: Output file must have one of these extensions: ${SUPPORTED_FORMATS.join(', ')}`);
+  console.error(`Got: ${ext}`);
   process.exit(1);
 }
 
-async function main() {
+async function generate3DModel(outputFile: string, ext: string) {
   console.log('Initializing manifold...');
   
   // Initialize manifold-3d
@@ -137,6 +150,42 @@ async function main() {
   await exportModel.writeFile(outputFile, doc);
   
   console.log(`✓ Generated ${outputFile}`);
+}
+
+async function generate2DExport(outputFile: string, format: 'svg' | 'png') {
+  console.log('Loading QR code exporters...');
+  
+  const params = {
+    text: values.text || 'cookiecad.com',
+    size: parseFloat(values.size || '25'),
+    extrudeDepth: parseFloat(values.depth || '0.5'),
+    dotShape: values['dot-shape'] || 'square',
+    innerEyeShape: values['inner-eye'] || 'square',
+    outerEyeShape: values['outer-eye'] || 'outerEyeSquare',
+    errorCorrectionLevel: values['error-level'] || 'M',
+  };
+  
+  console.log('Generating QR code with params:', params);
+  
+  if (format === 'svg') {
+    const { svgExport } = await import('./src/svgExport.ts');
+    const result = await svgExport(params);
+    await writeFile(outputFile, result.data as string, 'utf-8');
+  } else {
+    const { pngExport } = await import('./src/pngExport.ts');
+    const result = await pngExport(params);
+    await writeFile(outputFile, Buffer.from(result.data as ArrayBuffer));
+  }
+  
+  console.log(`✓ Generated ${outputFile}`);
+}
+
+async function main() {
+  if (ext === '.svg' || ext === '.png') {
+    await generate2DExport(outputFile, ext.slice(1) as 'svg' | 'png');
+  } else {
+    await generate3DModel(outputFile, ext);
+  }
 }
 
 main().catch((err) => {

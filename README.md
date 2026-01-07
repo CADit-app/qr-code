@@ -9,42 +9,57 @@ Generate customizable 3D QR codes with various dot shapes, eye styles, and error
 - **Error Correction Levels**: L (7%), M (15%), Q (25%), H (30%)
 - **Adjustable Size**: Set the output size in millimeters
 - **Variable Extrusion Depth**: Control how thick the QR code is
-- **CLI Support**: Generate 3D models directly from the command line
+- **Multiple Output Formats**: GLB, 3MF (3D models), SVG, PNG (2D graphics)
+- **CLI Support**: Generate outputs directly from the command line
 
 ## Usage
 
 ### Open in CADit
 
-Open this design in [CADit](https://app.cadit.app) to customize and generate your 3D QR code with a visual interface.
+Open this design in [CADit](https://app.cadit.app) to customize and generate your 3D QR code with a visual interface. You can also download SVG and PNG exports directly from the parameter menu.
 
 ### Command Line
 
-You can generate 3D models directly from the command line:
+You can generate QR codes directly from the command line:
 
 ```bash
 # Install dependencies
 pnpm install
 
-# Generate a .glb file (3D model) with default parameters
+# Generate a .glb file (3D model)
 pnpm build:glb
 
-# Generate a .3mf file (for 3D printing) with default parameters
+# Generate a .3mf file (for 3D printing)
 pnpm build:3mf
+
+# Generate a .svg file (vector graphic)
+pnpm build:svg
+
+# Generate a .png file (raster image)
+pnpm build:png
 
 # Generate with custom parameters
 npx tsx cli.ts my-qr.glb --text "https://example.com" --size 40 --depth 1
+npx tsx cli.ts my-qr.svg --text "https://example.com" --dot-shape circle
+npx tsx cli.ts my-qr.png --text "Hello World" --inner-eye circle
 ```
 
 ### CLI Options
 
 ```
 Usage:
-  npx tsx cli.ts <output.[glb|3mf]> [options]
+  npx tsx cli.ts <output.[glb|3mf|svg|png]> [options]
+
+Output Formats:
+  .glb   3D model (GLTF binary)
+  .3mf   3D model for printing
+  .svg   2D vector graphic
+  .png   2D raster image
 
 Options:
   -t, --text <string>          Text to encode (default: "cookiecad.com")
   -s, --size <number>          Size in mm (default: 25)
-  -d, --depth <number>         Extrusion depth in mm (default: 0.5)
+  -d, --depth <number>         Extrusion depth in mm (default: 0.5, 3D only)
   --dot-shape <string>         Dot shape (default: "square")
   --inner-eye <string>         Inner eye shape (default: "square")
   --outer-eye <string>         Outer eye shape (default: "outerEyeSquare")
@@ -53,8 +68,9 @@ Options:
 
 Examples:
   npx tsx cli.ts qr-code.glb
-  npx tsx cli.ts qr-code.3mf --text "https://example.com" --size 30
-  npx tsx cli.ts output.glb -t "Hello World" -s 50 -d 1
+  npx tsx cli.ts qr-code.svg --text "https://example.com"
+  npx tsx cli.ts qr-code.png --dot-shape circle
+  npx tsx cli.ts qr-code.3mf --text "Hello World" --size 50 --depth 1
 ```
 
 ### Available Shapes
