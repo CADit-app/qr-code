@@ -39,5 +39,14 @@
   "author": {
     "name": "CADit"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "files": [
+    "src/**/*",
+    "images/**/*",
+    "cadit.json",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }

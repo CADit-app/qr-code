@@ -13,7 +13,8 @@
   "images": [
     {
       "path": "images/preview.png",
-      "alt": "QR Code Generator Preview"
+      "alt": "QR Code Generator Preview",
+      "isPrimary": true
     }
   ]
 }

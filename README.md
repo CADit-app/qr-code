@@ -2,6 +2,8 @@
 
 Generate customizable 3D QR codes with various dot shapes, eye styles, and error correction levels.
 
+![QR Code Generator Preview](images/preview.png)
+
 ## Features
 
 - **Multiple Dot Shapes**: Square, circle, star, heart, diamond, and many more
