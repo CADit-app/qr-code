@@ -17,7 +17,7 @@
     "generate:svgs": "node scripts/generate-embedded-svgs.cjs"
   },
   "dependencies": {
-    "@cadit-app/script-params": "0.4.1",
+    "@cadit-app/script-params": "0.5.2",
     "@cadit-app/svg-sampler": "^0.1.0",
     "@resvg/resvg-wasm": "^2.6.2",
     "@types/qrcode": "^1.5.5",
